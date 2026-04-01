@@ -1,3 +1,5 @@
+// THIS CAN BE IGNORED (FIXED ANSWERS FOR THE QUESTIONS PROVIDED IN THE GOOGLE DOC)
+
 require("dotenv").config();
 const { MongoClient } = require("mongodb");
  
