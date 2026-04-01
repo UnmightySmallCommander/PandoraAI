@@ -217,7 +217,7 @@ async function askQuestion() {
   area.innerHTML = `<div class="empty"><span class="spinner"></span><span style="font-size:13px;color:var(--color-text-secondary)">Searching knowledge base...</span></div>`;
 
   try {
-    const res = await fetch('http://localhost:3000/ask', {
+    const res = await fetch('https://pandora-ai-wheat.vercel.app/ask', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question: q })
@@ -244,7 +244,7 @@ async function askQuestion() {
       </div>`;
   } catch(err) {
     const isCors = err.message.includes('Failed to fetch') || err.message.includes('NetworkError');
-    area.innerHTML = `<div class="error-card">${isCors ? 'Could not reach the server. Make sure your backend is running on <code>localhost:3000</code> and CORS is enabled.' : escHtml(err.message)}</div>`;
+    area.innerHTML = `<div class="error-card">${isCors ? 'Could not reach the server. Make sure your backend is running on <code>https://pandora-ai-wheat.vercel.app</code> and CORS is enabled.' : escHtml(err.message)}</div>`;
   }
 
   btn.disabled = false;
