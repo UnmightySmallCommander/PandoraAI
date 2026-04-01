@@ -83,6 +83,10 @@ app.get("/test-db", async (req, res) => {
  
 // --- Main AI route ---
 app.post("/ask", async (req, res) => {
+    // Ensure DB is connected before doing anything
+    if (!db) {
+        await connectDB(); 
+    }
     const { question } = req.body;
     if (!question || !question.trim()) {
         return res.status(400).json({ error: "Question is required." });
