@@ -217,11 +217,11 @@ async function askQuestion() {
   area.innerHTML = `<div class="empty"><span class="spinner"></span><span style="font-size:13px;color:var(--color-text-secondary)">Searching knowledge base...</span></div>`;
 
   try {
-    const res = await fetch('http://localhost:3000/ask', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question: q })
-    });
+    const res = await fetch('/ask', { 
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question: q })
+  });
 
     if (!res.ok) throw new Error(`Server error: ${res.status}`);
     const data = await res.json();
