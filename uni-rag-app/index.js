@@ -198,6 +198,6 @@ Rules you must follow:
 });
  
 // --- Start server ---
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
     console.log("Server running on port", process.env.PORT || 3000);
 });
