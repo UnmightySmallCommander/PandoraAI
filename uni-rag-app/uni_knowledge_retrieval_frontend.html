@@ -1,0 +1,257 @@
+<style>
+:root {
+  /* Modern Color Palette */
+  --primary: #FF5F1F; /* KMITL Orange */
+  --primary-hover: #e5551b;
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { 
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Inter', -apple-system, sans-serif;
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.app { 
+  width: 100%;
+  max-width: 800px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Header Design */
+.header { 
+  display: flex; 
+  align-items: center; 
+  gap: 15px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.5rem;
+}
+
+.header-icon { 
+  width: 48px; 
+  height: 48px; 
+  border-radius: 12px; 
+  background: linear-gradient(135deg, var(--primary), #ff8c5a);
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 95, 31, 0.3);
+}
+
+.header h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+.header p { font-size: 0.875rem; color: var(--text-muted); }
+
+/* Search Bar Design */
+.search-container {
+  background: #f1f5f9;
+  padding: 6px;
+  border-radius: 16px;
+  display: flex;
+  gap: 8px;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.search-container:focus-within {
+  background: white;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(255, 95, 31, 0.1);
+}
+
+.search-container input { 
+  flex: 1; 
+  padding: 12px 16px; 
+  font-size: 15px; 
+  border: none; 
+  background: transparent;
+  color: var(--text-main); 
+  outline: none; 
+}
+
+.search-container button { 
+  padding: 0 24px; 
+  font-size: 14px; 
+  font-weight: 600; 
+  border: none;
+  border-radius: 10px; 
+  background: var(--primary); 
+  color: white; 
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.search-container button:hover { background: var(--primary-hover); transform: translateY(-1px); }
+.search-container button:active { transform: translateY(0); }
+
+/* Suggestion Chips */
+.suggestions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.suggestions span { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+.chip { 
+  padding: 6px 14px; 
+  font-size: 13px; 
+  border: 1px solid var(--border); 
+  border-radius: 100px; 
+  color: var(--text-main); 
+  cursor: pointer; 
+  background: white; 
+  transition: all 0.2s;
+}
+
+.chip:hover { 
+  border-color: var(--primary); 
+  color: var(--primary); 
+  background: rgba(255, 95, 31, 0.05); 
+}
+
+/* Result Cards */
+.answer-card { 
+  background: #fff;
+  border-left: 4px solid var(--primary);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.answer-card .label { 
+  font-size: 12px; 
+  font-weight: 700; 
+  color: var(--primary); 
+  text-transform: uppercase; 
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.answer-card .text { font-size: 15px; color: #334155; line-height: 1.6; }
+
+/* Source Tags */
+.source-chip { 
+  padding: 4px 12px; 
+  font-size: 11px; 
+  font-weight: 600;
+  border-radius: 6px; 
+  color: #475569; 
+  background: #f1f5f9; 
+  border: 1px solid var(--border);
+}
+
+/* Animations */
+.spinner {
+  width: 18px; height: 18px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s ease infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<div class="app">
+  <div class="header">
+    <div class="header-icon">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+    </div>
+    <div>
+      <h1>KMITL Knowledge Base</h1>
+      <p>Intelligent Academic & Internship Assistant</p>
+    </div>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="queryInput" placeholder="How do I apply for an internship?">
+    <button id="askBtn" onclick="askQuestion()">Search</button>
+  </div>
+
+  <div class="suggestions">
+    <span>Quick access:</span>
+    <div class="chip" onclick="fillAndAsk('Required internship documents')">📄 Internship Docs</div>
+    <div class="chip" onclick="fillAndAsk('GE credit requirements')">🎓 GE Credits</div>
+    <div class="chip" onclick="fillAndAsk('Max credits per semester')">⚡ Max Credits</div>
+  </div>
+
+  <div id="resultArea">
+    </div>
+</div>
+
+<script>
+const input = document.getElementById('queryInput');
+const btn = document.getElementById('askBtn');
+const area = document.getElementById('resultArea');
+
+input.addEventListener('keydown', e => { if (e.key === 'Enter') askQuestion(); });
+
+function fillAndAsk(text) {
+  input.value = text;
+  askQuestion();
+}
+
+async function askQuestion() {
+  const q = input.value.trim();
+  if (!q) return;
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>';
+  area.innerHTML = `<div class="empty"><span class="spinner"></span><span style="font-size:13px;color:var(--color-text-secondary)">Searching knowledge base...</span></div>`;
+
+  try {
+    const res = await fetch('http://localhost:3000/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: q })
+    });
+
+    if (!res.ok) throw new Error(`Server error: ${res.status}`);
+    const data = await res.json();
+
+    const sources = (data.used_docs || []).map(d => d.title || d.sourceFile || 'Unknown').filter((v,i,a) => a.indexOf(v)===i);
+
+    area.innerHTML = `
+      <div class="result-area">
+        <div class="answer-card">
+          <div class="label">Answer</div>
+          <div class="text">${escHtml(data.answer)}</div>
+        </div>
+        ${sources.length ? `
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <span class="sources-label">Sources used (${(data.used_docs||[]).length} chunk${(data.used_docs||[]).length!==1?'s':''})</span>
+          <div class="source-chips">
+            ${sources.map(s => `<span class="source-chip">${escHtml(s)}</span>`).join('')}
+          </div>
+        </div>` : ''}
+      </div>`;
+  } catch(err) {
+    const isCors = err.message.includes('Failed to fetch') || err.message.includes('NetworkError');
+    area.innerHTML = `<div class="error-card">${isCors ? 'Could not reach the server. Make sure your backend is running on <code>localhost:3000</code> and CORS is enabled.' : escHtml(err.message)}</div>`;
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = 'Ask ↗';
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+</script>
