@@ -1,258 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KMITL Knowledge Base</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
 <style>
 :root {
-  /* Modern Color Palette */
-  --primary: #FF5F1F; /* KMITL Orange */
-  --primary-hover: #e5551b;
-  --bg-main: #f8fafc;
-  --bg-card: #ffffff;
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-  --border: #e2e8f0;
-  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --radius: 12px;
+  --orange: #FF5F1F;
+  --orange-light: #FF8C5A;
+  --orange-glow: rgba(255, 95, 31, 0.15);
+  --dark: #0D0D0D;
+  --dark-2: #161616;
+  --dark-3: #1E1E1E;
+  --dark-4: #272727;
+  --border: rgba(255,255,255,0.07);
+  --text: #F0EDE8;
+  --text-muted: #7A7672;
+  --text-dim: #4A4744;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-body { 
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  font-family: 'Inter', -apple-system, sans-serif;
-  line-height: 1.5;
-  display: flex;
-  justify-content: center;
-  padding: 2rem 1rem;
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
 
-.app { 
-  width: 100%;
-  max-width: 800px;
-  background: var(--bg-card);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 2rem;
+/* Ambient background */
+body::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(255,95,31,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Noise texture overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 6rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0;
 }
 
-/* Header Design */
-.header { 
-  display: flex; 
-  align-items: center; 
-  gap: 15px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 1.5rem;
+/* ── HEADER ── */
+.header {
+  margin-bottom: 3.5rem;
+  animation: fadeUp 0.6s ease both;
 }
 
-.header-icon { 
-  width: 48px; 
-  height: 48px; 
-  border-radius: 12px; 
-  background: linear-gradient(135deg, var(--primary), #ff8c5a);
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  color: white;
-  box-shadow: 0 4px 12px rgba(255, 95, 31, 0.3);
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 5px 14px 5px 8px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
 }
 
-.header h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
-.header p { font-size: 0.875rem; color: var(--text-muted); }
+.badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 6px var(--orange);
+  animation: pulse 2s ease infinite;
+}
 
-/* Search Bar Design */
-.search-container {
-  background: #f1f5f9;
-  padding: 6px;
-  border-radius: 16px;
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+h1 span {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+/* ── SEARCH ── */
+.search-wrapper {
+  position: relative;
+  margin-bottom: 1.25rem;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+
+.search-box {
+  width: 100%;
   display: flex;
-  gap: 8px;
-  transition: all 0.2s;
-  border: 2px solid transparent;
+  align-items: center;
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 6px 6px 6px 20px;
+  gap: 10px;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.search-container:focus-within {
-  background: white;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(255, 95, 31, 0.1);
+.search-box:focus-within {
+  border-color: rgba(255,95,31,0.4);
+  box-shadow: 0 0 0 3px rgba(255,95,31,0.08), 0 0 40px rgba(255,95,31,0.06);
 }
 
-.search-container input { 
-  flex: 1; 
-  padding: 12px 16px; 
-  font-size: 15px; 
-  border: none; 
-  background: transparent;
-  color: var(--text-main); 
-  outline: none; 
+.search-icon {
+  color: var(--text-dim);
+  flex-shrink: 0;
+  transition: color 0.2s;
 }
 
-.search-container button { 
-  padding: 0 24px; 
-  font-size: 14px; 
-  font-weight: 600; 
+.search-box:focus-within .search-icon {
+  color: var(--orange);
+}
+
+.search-input {
+  flex: 1;
+  background: none;
   border: none;
-  border-radius: 10px; 
-  background: var(--primary); 
-  color: white; 
+  outline: none;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  padding: 10px 0;
+  caret-color: var(--orange);
+}
+
+.search-input::placeholder {
+  color: var(--text-dim);
+}
+
+.search-btn {
+  background: var(--orange);
+  border: none;
+  border-radius: 10px;
+  padding: 11px 22px;
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.search-btn:hover:not(:disabled) {
+  background: var(--orange-light);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255,95,31,0.3);
+}
+
+.search-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.search-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ── CHIPS ── */
+.chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.chips-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-right: 2px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+  border-radius: 100px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.search-container button:hover { background: var(--primary-hover); transform: translateY(-1px); }
-.search-container button:active { transform: translateY(0); }
-
-/* Suggestion Chips */
-.suggestions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.suggestions span { font-size: 13px; color: var(--text-muted); font-weight: 500; }
-
-.chip { 
-  padding: 6px 14px; 
-  font-size: 13px; 
-  border: 1px solid var(--border); 
-  border-radius: 100px; 
-  color: var(--text-main); 
-  cursor: pointer; 
-  background: white; 
-  transition: all 0.2s;
+.chip:hover {
+  border-color: rgba(255,95,31,0.35);
+  color: var(--orange-light);
+  background: rgba(255,95,31,0.06);
 }
 
-.chip:hover { 
-  border-color: var(--primary); 
-  color: var(--primary); 
-  background: rgba(255, 95, 31, 0.05); 
+/* ── DIVIDER LINE ── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 2rem;
 }
 
-/* Result Cards */
-.answer-card { 
-  background: #fff;
-  border-left: 4px solid var(--primary);
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-top: 1rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+/* ── RESULT AREA ── */
+#resultArea {
+  animation: fadeUp 0.4s ease both;
+  min-height: 0;
 }
 
-.answer-card .label { 
-  font-size: 12px; 
-  font-weight: 700; 
-  color: var(--primary); 
-  text-transform: uppercase; 
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-.answer-card .text { font-size: 15px; color: #334155; line-height: 1.6; }
-
-/* Source Tags */
-.source-chip { 
-  padding: 4px 12px; 
-  font-size: 11px; 
-  font-weight: 600;
-  border-radius: 6px; 
-  color: #475569; 
-  background: #f1f5f9; 
+.result-card {
+  background: var(--dark-2);
   border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-/* Animations */
-.spinner {
-  width: 18px; height: 18px;
-  border: 3px solid rgba(255,255,255,0.3);
+.result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--dark-3);
+}
+
+.result-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.result-tag-dot {
+  width: 5px; height: 5px;
   border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 0.8s ease infinite;
+  background: var(--orange);
+}
+
+.result-body {
+  padding: 1.5rem;
+  font-size: 15px;
+  line-height: 1.75;
+  color: #C8C4BE;
+  font-weight: 300;
+}
+
+.result-footer {
+  padding: 0.875rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.footer-label {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+.source-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--dark-4);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+/* ── ERROR STATE ── */
+.error-card {
+  background: rgba(255, 59, 48, 0.06);
+  border: 1px solid rgba(255, 59, 48, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  font-size: 14px;
+  color: #FF6B6B;
+  line-height: 1.6;
+}
+
+.error-card code {
+  background: rgba(255,255,255,0.07);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* ── LOADING ── */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 1.5rem 0;
+}
+
+.loading-line {
+  height: 14px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--dark-3) 25%, var(--dark-4) 50%, var(--dark-3) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+.loading-line:nth-child(2) { width: 85%; animation-delay: 0.15s; }
+.loading-line:nth-child(3) { width: 70%; animation-delay: 0.3s; }
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── SPINNER ── */
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--dark-4); border-radius: 99px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .container { padding: 2.5rem 1rem 5rem; }
+  h1 { font-size: 1.75rem; }
+  .search-btn span { display: none; }
+}
 </style>
+</head>
+<body>
 
-<div class="app">
-  <div class="header">
-    <div class="header-icon">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+<div class="container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="badge">
+      <div class="badge-dot"></div>
+      King Mongkut's Institute of Technology Ladkrabang
+    </div>
+    <h1>KMITL <span>Knowledge</span><br>Base</h1>
+    <p class="subtitle">Ask anything about academics, internships, credits, and university procedures.</p>
+  </header>
+
+  <!-- Search -->
+  <div class="search-wrapper">
+    <div class="search-box">
+      <svg class="search-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
       </svg>
-    </div>
-    <div>
-      <h1>KMITL Knowledge Base</h1>
-      <p>Intelligent Academic & Internship Assistant</p>
+      <input
+        class="search-input"
+        id="queryInput"
+        type="text"
+        placeholder="How do I apply for an internship?"
+        autocomplete="off"
+      />
+      <button class="search-btn" id="askBtn" onclick="askQuestion()">
+        <span>Search</span>
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </button>
     </div>
   </div>
 
-  <div class="search-container">
-    <input type="text" id="queryInput" placeholder="How do I apply for an internship?">
-    <button id="askBtn" onclick="askQuestion()">Search</button>
-  </div>
-
-  <div class="suggestions">
-    <span>Quick access:</span>
-    <div class="chip" onclick="fillAndAsk('Required internship documents')">📄 Internship Docs</div>
-    <div class="chip" onclick="fillAndAsk('GE credit requirements')">🎓 GE Credits</div>
-    <div class="chip" onclick="fillAndAsk('Max credits per semester')">⚡ Max Credits</div>
-  </div>
-
-  <div id="resultArea">
+  <!-- Quick chips -->
+  <div class="chips-row">
+    <span class="chips-label">Try:</span>
+    <div class="chip" onclick="fillAndAsk('Required internship documents')">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Internship Docs
     </div>
+    <div class="chip" onclick="fillAndAsk('GE credit requirements')">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+      GE Credits
+    </div>
+    <div class="chip" onclick="fillAndAsk('Maximum credits per semester')">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      Max Credits
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Results -->
+  <div id="resultArea"></div>
+
 </div>
 
 <script>
 const input = document.getElementById('queryInput');
-const btn = document.getElementById('askBtn');
-const area = document.getElementById('resultArea');
+const btn   = document.getElementById('askBtn');
+const area  = document.getElementById('resultArea');
 
 input.addEventListener('keydown', e => { if (e.key === 'Enter') askQuestion(); });
 
 function fillAndAsk(text) {
   input.value = text;
+  input.focus();
   askQuestion();
 }
 
 async function askQuestion() {
   const q = input.value.trim();
-  if (!q) return;
+  if (!q) { input.focus(); return; }
 
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>';
-  area.innerHTML = `<div class="empty"><span class="spinner"></span><span style="font-size:13px;color:var(--color-text-secondary)">Searching knowledge base...</span></div>`;
+  btn.innerHTML = '<div class="spinner"></div>';
+
+  area.innerHTML = `
+    <div class="loading-state">
+      <div class="loading-line" style="width:90%"></div>
+      <div class="loading-line" style="width:75%"></div>
+      <div class="loading-line" style="width:60%"></div>
+    </div>`;
 
   try {
-    const res = await fetch('/ask', { 
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ question: q })
-  });
-
+    const res = await fetch('/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: q })
+    });
 
     if (!res.ok) throw new Error(`Server error: ${res.status}`);
     const data = await res.json();
 
-    const sources = (data.used_docs || []).map(d => d.title || d.sourceFile || 'Unknown').filter((v,i,a) => a.indexOf(v)===i);
+    const sources = (data.used_docs || [])
+      .map(d => d.title || d.sourceFile || 'Unknown')
+      .filter((v, i, a) => a.indexOf(v) === i);
+
+    const chunkCount = (data.used_docs || []).length;
 
     area.innerHTML = `
-      <div class="result-area">
-        <div class="answer-card">
-          <div class="label">Answer</div>
-          <div class="text">${escHtml(data.answer)}</div>
-        </div>
-        ${sources.length ? `
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <span class="sources-label">Sources used (${(data.used_docs||[]).length} chunk${(data.used_docs||[]).length!==1?'s':''})</span>
-          <div class="source-chips">
-            ${sources.map(s => `<span class="source-chip">${escHtml(s)}</span>`).join('')}
+      <div class="result-card" style="animation: fadeUp 0.35s ease both">
+        <div class="result-header">
+          <div class="result-tag">
+            <div class="result-tag-dot"></div>
+            Answer
           </div>
+          ${chunkCount ? `<span style="font-size:12px;color:var(--text-dim)">${chunkCount} source chunk${chunkCount !== 1 ? 's' : ''}</span>` : ''}
+        </div>
+        <div class="result-body">${escHtml(data.answer)}</div>
+        ${sources.length ? `
+        <div class="result-footer">
+          <span class="footer-label">Sources</span>
+          ${sources.map(s => `
+            <span class="source-chip">
+              <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="opacity:0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+              ${escHtml(s)}
+            </span>`).join('')}
         </div>` : ''}
       </div>`;
-  } catch(err) {
+
+  } catch (err) {
     const isCors = err.message.includes('Failed to fetch') || err.message.includes('NetworkError');
-    area.innerHTML = `<div class="error-card">${isCors ? 'Could not reach the server. Make sure your backend is running on <code>https://pandora-ai-wheat.vercel.app</code> and CORS is enabled.' : escHtml(err.message)}</div>`;
+    area.innerHTML = `
+      <div class="error-card">
+        ${isCors
+          ? `Could not reach the server. Make sure your backend is running on <code>https://pandora-ai-wheat.vercel.app</code> and CORS is enabled.`
+          : escHtml(err.message)
+        }
+      </div>`;
   }
 
   btn.disabled = false;
-  btn.innerHTML = 'Ask ↗';
+  btn.innerHTML = `
+    <span>Search</span>
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+    </svg>`;
 }
 
 function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\n/g, '<br>');
 }
 </script>
+</body>
+</html>
